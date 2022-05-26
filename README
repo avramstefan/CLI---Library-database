@@ -1,0 +1,135 @@
+Name: Avram Cristian-Stefan
+Group: 311CA
+
+------------------ The Library of HashBabel - Homework Nr. 2 ------------------
+
+I)  DESCRIPTION
+
+        For the beginning, the implementation was thought as following:
+
+    USERS HASHTABLE
+    |-------------|      |-------------|
+    | user_node_1 | ---> | user_node_2 | ---> ...
+    |_____________|      |_____________|
+           |
+           |    Actually not storing the entire book hashtable / library.
+           |    A user node data->value will be keeping the name of the book
+           |    that has been borrowed, along with the number of days that
+           |    this book is available.
+           |
+           |    BOOKS HASHTABLE
+    |-------------|      |-------------|
+    | book_node_1 | ---> | book_node_2 | ---> ...
+    |_____________|      |_____________|
+           |
+           |    This time, the book nodes data->value will keep a pointer to
+           |    a definitions hashtable, as it is stored entirely.
+           |
+           |    DEFINITIONS HASHTABLE
+    |-------------------|      |-------------------|
+    | definition_node_1 | ---> | definition_node_2 | ---> ...
+    |___________________|      |___________________|
+
+
+        So, the users hashtable is individually separated from the others two
+    hashtables. In order to complete the description, the following functions
+    or aspects need to be explained:
+
+        @ RESIZING FUNCTION (utils.c)
+                Not many things to mention about this function. It is used in
+            the case that a hasthable needs to be increased. So, there is all
+            about a load factor that refers to the number of buckets and
+            the number of entries:
+                load_factor = number_of_entries / number_of_buckets
+
+                Mainly, there is a new hashtable created from scratch with the
+            datas from the old hashtable, that are now stored according to
+            the new HMAX (max. number of buckets from a hashtable).
+
+
+                As this function has been made to work generically, it
+            needs an option as a parameter to do different things in
+            every case. 
+
+                Option 1) Every definition data->value will be sent as a 
+                          copy to the new_hashtable.
+                          
+                Option 2) Every book data->value (a definition hashtable) will
+                          be sent as a pointer and the properites of every
+                          node will be copied in the new created nodes.
+
+                Option 3) Every user data->value (reference to a book) will
+                          be sent as raw data, as a copy, and the properites
+                          of every node will be copied in the new created
+                          nodes.
+
+        @ NODE PROPERTIES
+                
+                As there is a need of keeping datas about every book according
+            user, a generic array was implemented.
+                Every node has a (void * properties) component in its
+            structure.
+                Using "inttypes.h" and int8_t data types, the following datas
+            are stored in this generic array:
+
+                BOOK_NODE->properites
+
+                |        int8_t           |        int        |     int     |
+                |    1     /       0      |                   |             |
+                | borrowed / not_borrowed |   nr_of_purchases |    rating   |
+
+                USER_NODE->properites
+
+                |        int8_t       |        int8_t            |     int    |
+                |    1     /       0  |      1     /    0        |            |
+                | not_banned / banned |  borrowed / not_borrowed |    points  |
+
+        @ RETURN_KEY_NODE FUNCTION (utils.c)
+
+                This function seems to be the same function as GET(), but the
+            difference between them is that this returns a node that is needed,
+            while GET() returns a value.
+
+        @ DELETE_BOOK_NODE FUNCTION (utils.c)
+
+                This may also seem to be the same function as REMOVE(),
+            but it has to free the hasthable of definitions, so it was 
+            simpler to implement another function.
+
+        @ READ_DICT_NAME FUNCTION (utils.c)
+
+                This function is used for reading the name of a book,
+            with the quotation marks. It is using sprintf().
+
+        @ INITIALIZE USER / BOOK FUNCTIONS
+
+                These functions are initializing the properties from
+            an user or book node. It is important to have these
+            properties initialized from the moment that an user or a 
+            book is added.
+
+
+II) COMMENTS
+
+    BETTER RESIZING ?
+        Maybe there could've been a beeter implementation of the
+    resizing function. It actually crosses over the entire dictionary
+    so it may be a little too ineffective, but I couldn't think of
+    another better solution.
+
+    THE THINGS TO GO ALONG with
+        There are lot of things that I have discovered during the
+    implementation of this code. Firstly, I have never used dictionaries
+    until now, so it was a little bit harder at the beginning. But, after
+    a few functions, I started to see the effects of working and
+    exercising with something as developing myself through that task.
+    At college, these hashmaps were controversial for me, but now I
+    really understand what is happenning behind the scenes from
+    lots of applications or programs.
+
+III) BIBLIOGRAPHY
+
+    Honestly, I've not opened any page on the internet to see how
+    to implement or solve something. But I had all I needed to do
+    this homework, as I've used the functions that were implemented
+    at the laboratory.
